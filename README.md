@@ -1,1 +1,1 @@
-# Lux
+# Luxembourgish News Headline Generation
