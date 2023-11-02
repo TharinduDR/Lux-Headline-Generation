@@ -1,1 +1,1 @@
-# Sinhala News Corpus
+# Lux
