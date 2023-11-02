@@ -29,7 +29,7 @@ train = train.rename(columns={'content': 'input_text', 'headline': 'target_text'
 test = test.rename(columns={'content': 'input_text', 'headline': 'target_text'})
 
 model_args = T5Args()
-model_args.num_train_epochs = 5
+model_args.num_train_epochs = 10
 model_args.no_save = False
 model_args.fp16 = False
 model_args.learning_rate = 1e-4
@@ -58,7 +58,7 @@ model_args.wandb_kwargs = {"name": model_name}
 
 model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available())
 
-train, eval_data = train_test_split(train, test_size=0.2, random_state=SEED)
+train, eval_data = train_test_split(train, test_size=0.1, random_state=SEED)
 model.train_model(train, eval_data=eval_data)
 
 input_list = test['input_text'].tolist()
