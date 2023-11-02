@@ -3,7 +3,8 @@ import os
 import pandas as pd
 import torch
 from sklearn.model_selection import train_test_split
-
+from datasets import Dataset
+from datasets import load_dataset
 from config.model_args import T5Args
 from experiments.evaluation import bleu, ter
 
@@ -17,11 +18,15 @@ model_representation = model_name.replace('/', '-')
 
 
 SEED = 777
-full = pd.read_csv("data/RTL_news_titles.tsv", sep="\t", error_bad_lines=False, names=['content', 'headline'], header=None)
-full["prefix"] = ""
-full = full.rename(columns={'content': 'input_text', 'headline': 'target_text'})
 
-full_train, test = train_test_split(full, test_size=0.2, random_state=SEED)
+train = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='train'))
+test = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='test'))
+
+train["prefix"] = ""
+test["prefix"] = ""
+
+train = train.rename(columns={'content': 'input_text', 'headline': 'target_text'})
+test = test.rename(columns={'content': 'input_text', 'headline': 'target_text'})
 
 model_args = T5Args()
 model_args.num_train_epochs = 5
@@ -53,7 +58,7 @@ model_args.wandb_kwargs = {"name": model_name}
 
 model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available())
 
-train, eval_data = train_test_split(full_train, test_size=0.2, random_state=SEED)
+train, eval_data = train_test_split(train, test_size=0.2, random_state=SEED)
 model.train_model(train, eval_data=eval_data)
 
 input_list = test['input_text'].tolist()
