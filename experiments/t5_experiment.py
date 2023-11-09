@@ -11,7 +11,7 @@ from experiments.evaluation import bleu, ter
 from t5.t5_model import T5Model
 
 
-model_name = "google/mt5-large"
+model_name = "google/mt5-small"
 model_type = "mt5"
 
 model_representation = model_name.replace('/', '-')
