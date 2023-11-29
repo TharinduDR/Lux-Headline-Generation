@@ -19,8 +19,8 @@ model_representation = model_name.replace('/', '-')
 
 SEED = 777
 
-train = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='train'))
-test = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='test'))
+train = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='train', download_mode='force_redownload'))
+test = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='test', download_mode='force_redownload'))
 
 train["prefix"] = ""
 test["prefix"] = ""
@@ -73,6 +73,6 @@ test.to_csv(os.path.join("outputs", model_representation, "predictions.tsv"), se
 del model
 
 print("Bleu Score ", bleu(truth_list, preds))
-print("Ter Score ", ter(truth_list, preds))
+# print("Ter Score ", ter(truth_list, preds))
 
 
