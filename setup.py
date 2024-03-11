@@ -4,15 +4,15 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="lux-headline-generation",
-    version="1.1.1",
+    name="lux_headline_generation",
+    version="0.1.0",
     author="Tharindu Ranasinghe",
     author_email="rhtdranasinghe@gmail.com",
     description="Transformer based headline generation for Luxembourgish",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/TharinduDR/Lux-Headline-Generation",
-    packages=find_packages(exclude=("examples", "docs", )),
+    packages=find_packages(exclude=("experiments" )),
     classifiers=[
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: Apache Software License",
