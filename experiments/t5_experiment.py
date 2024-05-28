@@ -19,14 +19,14 @@ model_representation = model_name.replace('/', '-')
 
 SEED = 777
 
-train = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='train', download_mode='force_redownload'))
-test = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='test', download_mode='force_redownload'))
+train = Dataset.to_pandas(load_dataset('instilux/lb-rtl-titles_gen', split='train', download_mode='force_redownload'))
+test = Dataset.to_pandas(load_dataset('instilux/lb-rtl-titles_gen', split='test', download_mode='force_redownload'))
 
 train["prefix"] = ""
 test["prefix"] = ""
 
-train = train.rename(columns={'content': 'input_text', 'headline': 'target_text'})
-test = test.rename(columns={'content': 'input_text', 'headline': 'target_text'})
+train = train.rename(columns={'text': 'input_text', 'target': 'target_text'})
+test = test.rename(columns={'text': 'input_text', 'target': 'target_text'})
 
 model_args = T5Args()
 model_args.num_train_epochs = 10
@@ -70,9 +70,8 @@ preds = model.predict(input_list)
 test["predictions"] = preds
 test.to_csv(os.path.join("outputs", model_representation, "predictions.tsv"), sep='\t', encoding='utf-8', index=False)
 
-del model
 
 print("Bleu Score ", bleu(truth_list, preds))
-# print("Ter Score ", ter(truth_list, preds))
+
 
 
