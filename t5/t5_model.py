@@ -15,6 +15,7 @@ from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.tensorboard import SummaryWriter
 from tqdm.auto import tqdm, trange
+from transformers import AutoTokenizer
 from transformers.models.byt5 import ByT5Tokenizer
 from transformers.models.mt5 import MT5Config, MT5ForConditionalGeneration
 from transformers.models.t5 import T5Config, T5ForConditionalGeneration, T5Tokenizer
@@ -132,7 +133,7 @@ class T5Model:
         elif model_type == "byt5":
             self.tokenizer = ByT5Tokenizer.from_pretrained(model_name, truncate=True)
         else:
-            self.tokenizer = T5Tokenizer.from_pretrained(model_name, truncate=True)
+            self.tokenizer = AutoTokenizer.from_pretrained(model_name, truncate=True)
 
         if self.args.dynamic_quantize:
             self.model = torch.quantization.quantize_dynamic(
