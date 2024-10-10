@@ -14,31 +14,25 @@ from experiments.evaluation import bleu, ter
 from t5.t5_model import T5Model
 
 
+# parser = argparse.ArgumentParser(
+#         description='''Produces headlines for a given news content''')
+# parser.add_argument('--model_name', type=str, required=True, help='model_name_or_path')
+# parser.add_argument('--news_content', type=str, required=True, help='news_content')
 
+# args = parser.parse_args()
 
-parser = argparse.ArgumentParser(
-        description='''Produces headlines for a given news content''')
-parser.add_argument('--model_name', type=str, required=True, help='model_name_or_path')
-parser.add_argument('--news_content', type=str, required=True, help='news_content')
-
-args = parser.parse_args()
-
-model_name = args.model_name
+model_name = "instilux/lux-t5-tri_rtl-titles_gen"
 model_type = "mt5"
 news_content = args.news_content
-# model_representation = model_name.replace('/', '-')
-#
-#
-# SEED = 777
-#
-# train = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='train', download_mode='force_redownload'))
-# test = Dataset.to_pandas(load_dataset('cucolab/lux-headlines', split='test', download_mode='force_redownload'))
-#
-# train["prefix"] = ""
-# test["prefix"] = ""
-#
-# train = train.rename(columns={'content': 'input_text', 'headline': 'target_text'})
-# test = test.rename(columns={'content': 'input_text', 'headline': 'target_text'})
+
+train = Dataset.to_pandas(load_dataset('instilux/lb-rtl-titles_gen', split='train', download_mode='force_redownload'))
+test = Dataset.to_pandas(load_dataset('instilux/lb-rtl-titles_gen', split='test', download_mode='force_redownload'))
+
+train["prefix"] = ""
+test["prefix"] = ""
+
+train = train.rename(columns={'text': 'input_text', 'target': 'target_text'})
+test = test.rename(columns={'text': 'input_text', 'target': 'target_text'})
 
 model_args = T5Args()
 model_args.num_train_epochs = 10
@@ -61,9 +55,6 @@ model_args.manual_seed = 777
 model_args.early_stopping_patience = 25
 model_args.save_steps = 10000
 
-# model_args.output_dir = os.path.join("outputs", model_representation)
-# model_args.best_model_dir = os.path.join("outputs", model_representation, "best_model")
-# model_args.cache_dir = os.path.join("cache_dir", model_representation)
 
 model_args.wandb_project = "LUX Headline Generation"
 model_args.wandb_kwargs = {"name": model_name}
@@ -73,14 +64,14 @@ model_args.wandb_kwargs = {"name": model_name}
 # train, eval_data = train_test_split(train, test_size=0.1, random_state=SEED)
 # model.train_model(train, eval_data=eval_data)
 #
-# input_list = test['input_text'].tolist()
-# truth_list = test['target_text'].tolist()
+input_list = test['input_text'].tolist()
+truth_list = test['target_text'].tolist()
 
 model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available())
-preds = model.predict([news_content])
+preds = model.predict(input_list)
 
-print("Generated Headline: ")
-print(preds[0])
+# print("Generated Headline: ")
+# print(preds[0])
 
 
 
