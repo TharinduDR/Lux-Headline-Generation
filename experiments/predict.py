@@ -70,8 +70,9 @@ truth_list = test['target_text'].tolist()
 model = T5Model(model_type, model_name, args=model_args, use_cuda=torch.cuda.is_available())
 preds = model.predict(input_list)
 
-# print("Generated Headline: ")
-# print(preds[0])
+test["predictions"] = preds
+test.to_csv("predictions.tsv", sep='\t', encoding='utf-8', index=False)
+
 
 
 
