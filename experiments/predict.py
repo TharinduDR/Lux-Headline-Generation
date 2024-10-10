@@ -23,7 +23,7 @@ from t5.t5_model import T5Model
 
 model_name = "instilux/lux-t5-tri_rtl-titles_gen"
 model_type = "mt5"
-news_content = args.news_content
+# news_content = args.news_content
 
 train = Dataset.to_pandas(load_dataset('instilux/lb-rtl-titles_gen', split='train', download_mode='force_redownload'))
 test = Dataset.to_pandas(load_dataset('instilux/lb-rtl-titles_gen', split='test', download_mode='force_redownload'))
